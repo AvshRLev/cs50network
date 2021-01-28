@@ -1,14 +1,35 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
+from django import forms
 
-from .models import User
+from .models import User, Post
 
+
+class NewPostForm(forms.Form):
+    content = forms.CharField(widget=forms.Textarea(attrs={
+        'class': 'form-control',
+        'placeholder': 'New Post',
+        'required': 'required',
+        'style':'padding: 5px; width: 85%;'
+        }), label=False)
 
 def index(request):
-    return render(request, "network/index.html")
+    return render(request, "network/index.html", {
+        'form': NewPostForm()
+    })
+
+def new_post(request):
+    form = NewPostForm(request.POST)
+    if form.is_valid():
+        user = request.user
+        content = form.cleaned_data['content']
+        post = Post(user=user, content=content,)
+        post.save()
+    return redirect('index')
+    pass
 
 
 def login_view(request):

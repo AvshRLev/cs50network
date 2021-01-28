@@ -1,0 +1,12 @@
+#new-post{
+    border-style: ridge;
+    display: none;
+    margin: 0 auto;
+    padding: 20%;
+}
+#form-new-post{
+
+    display:none;
+    margin: 10%;
+    
+}
