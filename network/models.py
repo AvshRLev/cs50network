@@ -12,4 +12,4 @@ class Post(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     likes = models.IntegerField(default=0)
     def __str__(self):
-        return f"{self.timestamp} Post by {self.user}"
+        return f"{self.timestamp.date()} {str(self.timestamp.time())[0:5]} Post by {self.user}"

@@ -9,4 +9,19 @@
     display:none;
     margin: 10%;
     
+    
+}
+.post-list{
+    border-style: ridge;
+    margin:3px;
+    padding: 4px;
+    width: 85%;
+    margin-left: 20px;
+}
+
+.post-timestamp{
+    color: rgb(162, 165, 162);
+}
+.post-content{
+    margin-bottom: 3px;
 }

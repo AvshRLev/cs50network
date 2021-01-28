@@ -1,9 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django import forms
+
 
 from .models import User, Post
 
@@ -13,12 +15,18 @@ class NewPostForm(forms.Form):
         'class': 'form-control',
         'placeholder': 'New Post',
         'required': 'required',
-        'style':'padding: 5px; width: 85%;'
+        'style':'padding: 5px; width: 85%; margin-left: 20px; margin-bottom: 5px;'
         }), label=False)
 
 def index(request):
+    posts = Post.objects.all()
+    posts = posts.order_by("-timestamp").all()
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     return render(request, "network/index.html", {
-        'form': NewPostForm()
+        'form': NewPostForm(),
+        'page_obj': page_obj,
     })
 
 def new_post(request):
