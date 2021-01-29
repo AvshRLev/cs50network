@@ -8,7 +8,7 @@ from django.urls import reverse
 from django import forms
 
 
-from .models import User, Post
+from .models import User, Post, Following
 
 
 class NewPostForm(forms.Form):
@@ -43,15 +43,34 @@ def new_post(request):
 @login_required
 def profile(request, user):
     profile_user = User.objects.get(username=user)
+    user = request.user
+    try:
+        following = Following.objects.get(user_followed=profile_user, followed_by=user)
+    except:
+        following = None
     posts = Post.objects.all().filter(user=profile_user)
     posts = posts.order_by("-timestamp").all()
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, "network/profile.html", {
+        'following': following,
         'profile_user': profile_user,
         'page_obj': page_obj,
     })
+
+
+def followship(request, profile_user):
+    profile_user = User.objects.get(username=profile_user)
+    user = request.user
+    try:
+        followship = Following.objects.get(user_followed=profile_user, followed_by=user)
+        followship.delete()
+    except:
+        followship = Following(user_followed=profile_user, followed_by=user)
+        followship.save()
+    return redirect('profile', profile_user)
+    
     
 
 def login_view(request):

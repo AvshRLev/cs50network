@@ -1,15 +1,18 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    {% if user.is_authenticated %}
-        {% if user == profile_user %}
-        
-        {% else %}
-            <div>Follow/unfollow</div>
-        {% endif %}
-    {% endif %}
-    <div class="user-profile">
-        <div>{{ user_profile.username }}</div>
+    <div class="profile-user">
+            <strong>{{ profile_user }}</strong>
+            {% if user.is_authenticated %}
+                {% if user == profile_user %}
+                {% else %}
+                    {% if following %}
+                        <a href="{% url 'followship' profile_user %}"><small>Unfollow</small></a>
+                    {% else %}
+                        <a href="{% url 'followship' profile_user %}"><small>Follow</small></a>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
     </div>
     {% for post in page_obj %}
         <div class="post-list">

@@ -25,3 +25,9 @@
 .post-content{
     margin-bottom: 3px;
 }
+.profile-user{
+    border-style: ridge;
+    padding: 4px;
+    width: 85%;
+    margin-left: 20px;
+}
