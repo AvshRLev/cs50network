@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -39,6 +40,19 @@ def new_post(request):
     return redirect('index')
     pass
 
+@login_required
+def profile(request, user):
+    profile_user = User.objects.get(username=user)
+    posts = Post.objects.all().filter(user=profile_user)
+    posts = posts.order_by("-timestamp").all()
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, "network/profile.html", {
+        'profile_user': profile_user,
+        'page_obj': page_obj,
+    })
+    
 
 def login_view(request):
     if request.method == "POST":
