@@ -3,6 +3,7 @@
 {% block body %}
     <div class="profile-user">
             <strong>{{ profile_user }}</strong>
+            <span>Following: {{ profile_user.follows_this_many }} Followed by: {{ profile_user.followed_by_this_many }}</span>
             {% if user.is_authenticated %}
                 {% if user == profile_user %}
                 {% else %}
@@ -14,6 +15,17 @@
                 {% endif %}
             {% endif %}
     </div>
+    {% if user.is_authenticated %}
+    <div id="#new-post">
+        <div class="form-group">
+            <form action="{% url 'new_post'%}" method="POST" class="form-group" >
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit" value="Post" class="btn btn-primary" style="margin-left: 20px;">
+            </form>
+        </div>
+    </div>
+    {% endif %}
     {% for post in page_obj %}
         <div class="post-list">
             <div><strong>{{ post.user }}</strong></div>

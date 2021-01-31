@@ -54,6 +54,7 @@ def profile(request, user):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, "network/profile.html", {
+        'form': NewPostForm(),
         'following': following,
         'profile_user': profile_user,
         'page_obj': page_obj,
@@ -63,12 +64,33 @@ def profile(request, user):
 def followship(request, profile_user):
     profile_user = User.objects.get(username=profile_user)
     user = request.user
-    try:
+    try:        
         followship = Following.objects.get(user_followed=profile_user, followed_by=user)
-        followship.delete()
-    except:
+        followship.delete()        
+        flag = True
+
+    except:        
         followship = Following(user_followed=profile_user, followed_by=user)
-        followship.save()
+        followship.save()        
+        flag = False
+
+    if flag == True:
+        user = request.user
+        followers_update = User.objects.get(username=profile_user)
+        followers_update.followed_by_this_many -= 1
+        followers_update.save()
+        following_update = User.objects.get(username=user)
+        following_update.follows_this_many -= 1 
+        following_update.save()
+
+    else:
+        follower_update = User.objects.get(username=profile_user)
+        follower_update.followed_by_this_many += 1
+        follower_update.save()
+        following_update = User.objects.get(username=user)
+        following_update.follows_this_many += 1 
+        following_update.save()
+    
     return redirect('profile', profile_user)
     
     
