@@ -19,6 +19,7 @@ class NewPostForm(forms.Form):
         'style':'padding: 5px; width: 85%; margin-left: 20px; margin-bottom: 5px;'
         }), label=False)
 
+
 def index(request):
     posts = Post.objects.all()
     posts = posts.order_by("-timestamp").all()
@@ -30,6 +31,22 @@ def index(request):
         'page_obj': page_obj,
     })
 
+
+@login_required    
+def following_view(request):
+    user = request.user
+    user_is_following = Following.objects.all().filter(followed_by=user).values_list('user_followed', flat=True)
+    posts = Post.objects.all().filter(user__in=user_is_following)
+    posts = posts.order_by("-timestamp").all()
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, "network/index.html", {
+        'form': NewPostForm(),
+        'page_obj': page_obj,
+    })
+
+
 def new_post(request):
     form = NewPostForm(request.POST)
     if form.is_valid():
@@ -38,7 +55,7 @@ def new_post(request):
         post = Post(user=user, content=content,)
         post.save()
     return redirect('index')
-    pass
+    
 
 @login_required
 def profile(request, user):
@@ -92,7 +109,6 @@ def followship(request, profile_user):
         following_update.save()
     
     return redirect('profile', profile_user)
-    
     
 
 def login_view(request):
