@@ -6,6 +6,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django import forms
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 
 from .models import User, Post, Following
@@ -55,7 +57,20 @@ def new_post(request):
         post = Post(user=user, content=content,)
         post.save()
     return redirect('index')
-    
+
+@csrf_exempt
+@login_required
+def edit_post(request, post_id):
+    try:
+        post = Post.objects.get(user=request.user, id=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Post not found."}, status=404)    
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        if data.get("content") is not None:
+            post.content = data["content"]
+        post.save()
+        return HttpResponse(status=204)
 
 @login_required
 def profile(request, user):

@@ -31,3 +31,22 @@
     width: 85%;
     margin-left: 20px;
 }
+
+#edit-content{
+    
+    columns: 2;
+    padding: 4px;
+    width: 65%;
+    margin-left: 40px;
+}
+
+#edit-submit{
+    
+    padding: 4px;
+    font-size: 40%;
+    margin-left: 40px;
+}
+
+.edit_content{
+    display: none;
+}
