@@ -8,6 +8,7 @@ from django.urls import reverse
 from django import forms
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.http import JsonResponse
 
 
 from .models import User, Post, Following
@@ -58,11 +59,12 @@ def new_post(request):
         post.save()
     return redirect('index')
 
+
 @csrf_exempt
 @login_required
 def edit_post(request, post_id):
     try:
-        post = Post.objects.get(user=request.user, id=post_id)
+        post = Post.objects.get(id=post_id)
     except Post.DoesNotExist:
         return JsonResponse({"error": "Post not found."}, status=404)    
     if request.method == "PUT":
@@ -71,6 +73,29 @@ def edit_post(request, post_id):
             post.content = data["content"]
         post.save()
         return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=404)
+        
+
+@csrf_exempt
+@login_required
+def like_handler(request, post_id):
+    try:
+        post = Post.objects.get(id=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Post not found."}, status=404)  
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        if data.get("like") is not None:
+            if request.user in post.users_liking.all():
+                post.users_liking.remove(request.user)
+                post.likes -= 1
+            else:
+                post.users_liking.add(request.user)
+                post.likes += 1
+        post.save()
+        return JsonResponse(post.serialize())
+
 
 @login_required
 def profile(request, user):

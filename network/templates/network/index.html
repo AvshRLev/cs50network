@@ -16,7 +16,11 @@
     {% endif %}
     {% for post in page_obj %}
         <div class="post-list" id="{{post.id}}">
-            <div><strong><a href="{% url 'profile' post.user %}">{{ post.user }}</a></strong></div>
+            {% if user.is_authenticated %}
+                <div><strong><a href="{% url 'profile' post.user %}">{{ post.user }}</a></strong></div>
+            {% else %}
+                <div><strong>{{ post.user }}</strong></div>
+            {% endif %}
             {% if user == post.user %}
                 <div><small><button class="btn btn-sm btn-outline-primary" id="edit{{post.id}}" class="edit">Edit</button></small></div>
             {% endif %}
@@ -29,7 +33,11 @@
                 </form>
             </div>
             <div class="post-timestamp">{{ post.timestamp }}</div>
-            <div>&#128151; {{ post.likes }}</div>
+            {% if user.is_authenticated %}
+                <span > <a href="" id="like{{post.id}}"> &#128151;</a> <i id="likes{{post.id}}">{{ post.likes }}</i></span>
+            {% else %}
+                <div>&#128151; {{ post.likes }}</div>
+            {% endif %}
         </div>
     {% endfor %}
     <div class="pagination">
