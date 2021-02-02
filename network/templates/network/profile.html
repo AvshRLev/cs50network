@@ -16,23 +16,13 @@
                 {% endif %}
             {% endif %}
     </div>
-    <!-- {% if user.is_authenticated %}
-    <div id="#new-post">
-        <div class="form-group">
-            <form action="{% url 'new_post'%}" method="POST" class="form-group" >
-                {% csrf_token %}
-                {{ form }}
-                <input type="submit" value="Post" class="btn btn-primary" style="margin-left: 20px;">
-            </form>
-        </div>
-    </div>
-    {% endif %} -->
     {% for post in page_obj %}
         <div class="post-list" id="{{post.id}}">
             <div><strong>{{ post.user }}</strong></div>
             {% if user == post.user %}
                 <div><small><button class="btn btn-sm btn-outline-primary" id="edit{{post.id}}" class="edit">Edit</button></small></div>
             {% endif %}
+            <!-- <div class="post-content"><strong class="message">We seem to be having trouble updating yout post, please try again later...</strong></div> -->
             <br>
             <div class="post-content" id="edit{{post.id}}-content">{{ post.content }}</div>
             <div class="edit_content" id="edit{{post.id}}_content">
@@ -42,23 +32,30 @@
                 </form>
             </div>
             <div class="post-timestamp">{{ post.timestamp }}</div>
-            <div>&#128151; {{ post.likes }}</div>
+            {% if user.is_authenticated %}
+                <u><a href="" id="like{{post.id}}"> &#128151;</a> <i id="likes{{post.id}}">{{ post.likes }}</i></u>
+            {% else %}
+                <div>&#128151; {{ post.likes }}</div>
+            {% endif %}
         </div>
     {% endfor %}
     <div class="pagination">
         <span class="step-links">
             {% if page_obj.has_previous %}
-                <a href="?page=1"><button class="btn btn-sm btn-outline-primary">&laquo; first</button></a>
+                <a href="?page=1">&laquo; first</a>
                 <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                <div class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </div>
             {% endif %}
 
-            <div class="current">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-            </div>
-
+            
             {% if page_obj.has_next %}
                 <a href="?page={{ page_obj.next_page_number }}">next</a>
                 <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                <div class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </div>    
             {% endif %}
         </span>
     </div>

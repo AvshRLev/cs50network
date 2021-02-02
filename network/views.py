@@ -16,10 +16,11 @@ from .models import User, Post, Following
 
 class NewPostForm(forms.Form):
     content = forms.CharField(widget=forms.Textarea(attrs={
-        'class': 'form-control',
+        'class': 'form-control-sm inline',
         'placeholder': 'New Post',
         'required': 'required',
-        'style':'padding: 5px; width: 85%; margin-left: 20px; margin-bottom: 5px;'
+        'style':'rows: 2; padding: 4px; width: 65%; margin-left: 40px; margin-top:17px',
+        'id': 'new-post-form'
         }), label=False)
 
 
@@ -72,7 +73,7 @@ def edit_post(request, post_id):
         if data.get("content") is not None:
             post.content = data["content"]
         post.save()
-        return HttpResponse(status=204)
+        return JsonResponse(post.serialize())
     else:
         return HttpResponse(status=404)
         

@@ -1,20 +1,29 @@
 #new-post{
     border-style: ridge;
-    display: none;
-    margin: 0 auto;
-    padding: 20%;
+    margin: 3px;
+    padding: 4px;
+    width: 85%;
+    margin-left: 20px;
 }
-#form-new-post{
 
-    display:none;
-    margin: 10%;
+#submit-btn{
+   font-size: 70%;
+   margin-left: 40px;
+   /* margin-top: 5px; */
+} 
+
+#new-post-form{
+
+    columns: 2;
+    color: darkslateblue;
+    margin-left: 50%;
     
     
 }
 .post-list{
     border-style: ridge;
     margin:3px;
-    padding: 4px;
+    padding: 8px;
     width: 85%;
     margin-left: 20px;
 }
@@ -49,4 +58,17 @@
 
 .edit_content{
     display: none;
+}
+.new{
+    margin:3px;
+    padding: 4px;
+    width: 85%;
+    margin-left: 20px;
+}
+.pagination{
+    margin:3px;
+    padding: 6px;
+    width: 85%;
+    margin-left: 20px;
+    font-weight: bold;
 }
