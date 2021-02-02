@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block body %}
+    <br>
     <div class="profile-user">
             <strong>{{ profile_user }}</strong>
             <span>Following: {{ profile_user.follows_this_many }} Followed by: {{ profile_user.followed_by_this_many }}</span>
@@ -16,13 +17,13 @@
                 {% endif %}
             {% endif %}
     </div>
+    <br>
     {% for post in page_obj %}
         <div class="post-list" id="{{post.id}}">
             <div><strong>{{ post.user }}</strong></div>
             {% if user == post.user %}
                 <div><small><button class="btn btn-sm btn-outline-primary" id="edit{{post.id}}" class="edit">Edit</button></small></div>
             {% endif %}
-            <!-- <div class="post-content"><strong class="message">We seem to be having trouble updating yout post, please try again later...</strong></div> -->
             <br>
             <div class="post-content" id="edit{{post.id}}-content">{{ post.content }}</div>
             <div class="edit_content" id="edit{{post.id}}_content">

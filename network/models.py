@@ -38,6 +38,7 @@ class Post(models.Model):
             "user": self.user.username,
             "likes": self.likes,
             "content": self.content,
+            "status": 204
         }
 
     def __str__(self):

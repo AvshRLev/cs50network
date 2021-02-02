@@ -1,10 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
     
-    // let messages = document.querySelectorAll('.message');
-    //     for (i of messages) {
-    //         i.style.display = 'none';
-    //     }
-    
     let btns = document.querySelectorAll('small');
         for (i of btns) {
             i.addEventListener('click', function(event) {            
@@ -24,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(response => response.json())
                 .then(post => {
-                    if (post.content === new_text) {
+                    if (post.status === 204) {
                         document.querySelector(`#${event.srcElement.id}_content`).style.display = 'none';
                         document.querySelector(`#${event.srcElement.id}-content`).innerHTML = post.content;
                         document.querySelector(`#${event.srcElement.id}-content`).style.display = 'block';

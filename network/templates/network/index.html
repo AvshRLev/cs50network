@@ -28,7 +28,6 @@
             {% if user == post.user %}
                 <div><small><button class="btn btn-sm btn-outline-primary" id="edit{{post.id}}" class="edit">Edit</button></small></div>
             {% endif %}
-            <!-- <div class="post-content"><strong class="message">We seem to be having trouble updating yout post, please try again later...</strong></div> -->
             <br>
             <div class="post-content" id="edit{{post.id}}-content">{{ post.content }}</div>
             <div class="edit_content" id="edit{{post.id}}_content">
